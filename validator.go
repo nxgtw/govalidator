@@ -569,6 +569,22 @@ func IsDNSName(str string) bool {
 		// constraints already violated
 		return false
 	}
+	if len(str) >= 256 {
+		return false
+	}
+	if (strings.LastIndex(str,".") == len(str) - 1) {
+		str = str[0:len(str)-1]
+	}
+	if (strings.Count(str,".") == 0){
+		return false
+	}
+	strToSlice := strings.Split(str,".")
+	levelNum := len(strToSlice)
+	for i:=0; i < levelNum; i++ {
+		if  ( (strings.Index(strToSlice[i],"-") == 0)  || (strings.LastIndex(strToSlice[i],"-") == len(strToSlice[i])-1) ) {
+			return false
+		}
+	}
 	return !IsIP(str) && rxDNSName.MatchString(str)
 }
 
